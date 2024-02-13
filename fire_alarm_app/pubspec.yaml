@@ -37,6 +37,7 @@ dependencies:
   go_router: ^13.1.0
   firebase_database: ^10.4.5
   google_fonts: ^6.1.0
+  firebase_core: ^2.25.4
 
 dev_dependencies:
   flutter_test:
@@ -78,8 +79,8 @@ flutter:
   fonts:
     - family: DM Sans
       fonts:
-        - asset: assets/fonts/DMSans-Regular.ttf
-        - asset: assets/fonts/DMSans-Bold.ttf
+        - asset: assets/font/DMSans-Regular.ttf
+        - asset: assets/font/DMSans-Bold.ttf
           weight: 700
   #   - family: Trajan Pro
   #     fonts:

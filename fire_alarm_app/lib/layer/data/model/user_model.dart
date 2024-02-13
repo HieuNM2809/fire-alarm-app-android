@@ -1,43 +1,4 @@
 class UserModel {
-  Config? config;
-  User1? user1;
-
-  UserModel({this.config, this.user1});
-
-  UserModel.fromJson(Map<String, dynamic> json) {
-    config = json['config'] != null ? Config.fromJson(json['config']) : null;
-    user1 = json['user1'] != null ? User1.fromJson(json['user1']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (config != null) {
-      data['config'] = config!.toJson();
-    }
-    if (user1 != null) {
-      data['user1'] = user1!.toJson();
-    }
-    return data;
-  }
-}
-
-class Config {
-  int? userIdCurrent;
-
-  Config({this.userIdCurrent});
-
-  Config.fromJson(Map<String, dynamic> json) {
-    userIdCurrent = json['userIdCurrent'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['userIdCurrent'] = userIdCurrent;
-    return data;
-  }
-}
-
-class User1 {
   String? antiTheft;
   String? buttonRemoteOFF;
   String? buttonRemoteON;
@@ -55,7 +16,7 @@ class User1 {
   String? zone3;
   String? zonee4;
 
-  User1(
+  UserModel(
       {this.antiTheft,
       this.buttonRemoteOFF,
       this.buttonRemoteON,
@@ -73,7 +34,7 @@ class User1 {
       this.zone3,
       this.zonee4});
 
-  User1.fromJson(Map<String, dynamic> json) {
+  UserModel.fromJson(Map<String, dynamic> json) {
     antiTheft = json['antiTheft'];
     buttonRemoteOFF = json['buttonRemoteOFF'];
     buttonRemoteON = json['buttonRemoteON'];

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "859661221744",
+    "firebase_url": "https://thietbibaochay-v2-default-rtdb.firebaseio.com",
+    "project_id": "thietbibaochay-v2",
+    "storage_bucket": "thietbibaochay-v2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:859661221744:android:babfeeb6242d14b36b19b5",
+        "android_client_info": {
+          "package_name": "com.example.fire_alarm_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDznTGBbYNQJ7xdgwdLbr6mnQFlbq0ukLg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
