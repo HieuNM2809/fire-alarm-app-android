@@ -1,7 +1,7 @@
-import 'package:fire_alarm_app/layer/presentation/home/home.dart';
 import 'package:fire_alarm_app/main.dart';
 import 'package:go_router/go_router.dart';
 
+import '../layer/presentation/home/home_page.dart';
 import '../layer/presentation/login/login.dart';
 
 class GoRouterConfig {
@@ -11,11 +11,11 @@ class GoRouterConfig {
       GoRoute(
         path: '/',
         builder: (context, state) {
-          return const LoginScreen();
+          return const HomePage();
         },
       ),
       GoRoute(
-        path: HomePage.routename,
+        path: HomePage.routeName,
         builder: (context, state) {
           return const HomePage();
         },

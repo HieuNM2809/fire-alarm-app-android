@@ -1,6 +1,5 @@
 import 'package:fire_alarm_app/config/go_router_config.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -9,6 +8,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GoRouterConfig goRouterConfig = GoRouterConfig();
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: '',
