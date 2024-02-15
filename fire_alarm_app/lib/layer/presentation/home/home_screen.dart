@@ -24,11 +24,12 @@ class HomeScreen extends StatefulWidget {
   }
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   HomeScreenState();
-
+  final UserRepository userRepository = UserRepository();
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
     Alarm.init();
     _load();
@@ -36,7 +37,25 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    if (Alarm.hasAlarm()) {
+      Alarm.stop(1);
+    }
+
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.inactive) {
+      if (Alarm.hasAlarm()) {
+        Alarm.stopAll();
+      }
+    }
+    if (state == AppLifecycleState.resumed) {
+      userRepository.getData(widget._homeBloc);
+    }
   }
 
   @override
@@ -58,10 +77,17 @@ class HomeScreenState extends State<HomeScreen> {
             );
           }
           if (currentState is InHomeState) {
-            if (currentState.dataHomePage.temperatureAlert == "true") {
+            if (currentState.dataHomePage.temperatureAlert == "true" ||
+                currentState.dataHomePage.gasAlert == "true" ||
+                currentState.dataHomePage.antiTheft! ||
+                currentState.dataHomePage.pump == "true" ||
+                currentState.dataHomePage.zone1 == "true" ||
+                currentState.dataHomePage.zone2 == "true" ||
+                currentState.dataHomePage.zone3 == "true" ||
+                currentState.dataHomePage.zone4 == "true") {
               alarmFunction();
             } else {
-              Alarm.stop(1);
+              Alarm.stopAll();
             }
             return body(currentState.dataHomePage);
           }
@@ -179,10 +205,15 @@ class HomeScreenState extends State<HomeScreen> {
                     width: Dimen.sizeDevice.width * 0.2,
                     height: 60,
                     child: TextButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          await userRepository.updateSOS(
+                              widget._homeBloc, dataHomePage);
+                        },
                         style: TextButton.styleFrom(
                             elevation: 4,
-                            backgroundColor: Colors.white,
+                            backgroundColor: dataHomePage.sos!
+                                ? const Color.fromARGB(255, 255, 180, 59)
+                                : Colors.white,
                             shadowColor: Colors.black,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0)),
@@ -190,9 +221,11 @@ class HomeScreenState extends State<HomeScreen> {
                               color: Colors.black,
                               width: 1,
                             )),
-                        child: const Text("SOS",
+                        child: Text("SOS",
                             style: TextStyle(
-                                color: Colors.black,
+                                color: dataHomePage.sos!
+                                    ? Colors.white
+                                    : Colors.black,
                                 fontFamily: 'DM Sans',
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold))),
@@ -220,31 +253,37 @@ class HomeScreenState extends State<HomeScreen> {
                       const SizedBox(
                         width: 100,
                       ),
-                      const NotiButton(
+                      NotiButton(
                         textButton: 'khí gas',
                         image: ImageData.gasStation,
-                        color: Colors.white,
+                        color: dataHomePage.gasAlert == "true"
+                            ? const Color.fromARGB(255, 255, 180, 59)
+                            : Colors.white,
                       )
                     ],
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       NotiButton(
                         textButton: 'chuông',
                         image: ImageData.notification,
-                        color: Colors.white,
+                        color: dataHomePage.antiTheft!
+                            ? const Color.fromARGB(255, 255, 180, 59)
+                            : Colors.white,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 100,
                       ),
                       NotiButton(
                         textButton: 'bơm',
                         image: ImageData.pump,
-                        color: Colors.white,
+                        color: dataHomePage.pump == "true"
+                            ? const Color.fromARGB(255, 255, 180, 59)
+                            : Colors.white,
                       )
                     ],
                   )
@@ -268,35 +307,34 @@ class HomeScreenState extends State<HomeScreen> {
                             offset: Offset(0, 1),
                             blurRadius: 6)
                       ]),
-                  child: ListView.builder(
-                    itemCount: 4,
-                    padding: const EdgeInsets.all(8),
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.only(right: 40),
-                      child: Container(
-                        height: 60,
-                        width: 60,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.white,
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: Color.fromARGB(255, 107, 107, 107),
-                                  offset: Offset(0, 1),
-                                  blurRadius: 2)
-                            ]),
-                        child: Text(
-                          "Vùng ${index + 1}",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontFamily: 'DM Sans',
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
-                        ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ZoneButton(
+                        text: 'Vùng 1',
+                        color: dataHomePage.zone1 == "true"
+                            ? const Color.fromARGB(255, 255, 180, 59)
+                            : Colors.white,
                       ),
-                    ),
+                      ZoneButton(
+                        text: 'Vùng 2',
+                        color: dataHomePage.zone2 == "true"
+                            ? const Color.fromARGB(255, 255, 180, 59)
+                            : Colors.white,
+                      ),
+                      ZoneButton(
+                        text: 'Vùng 3',
+                        color: dataHomePage.zone3 == "true"
+                            ? const Color.fromARGB(255, 255, 180, 59)
+                            : Colors.white,
+                      ),
+                      ZoneButton(
+                        text: 'Vùng 4',
+                        color: dataHomePage.zone4 == "true"
+                            ? const Color.fromARGB(255, 255, 180, 59)
+                            : Colors.white,
+                      ),
+                    ],
                   )),
             ),
             const SizedBox(
@@ -325,11 +363,16 @@ class HomeScreenState extends State<HomeScreen> {
                         height: 60,
                         width: 150,
                         child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              userRepository.updateButtonRemote(
+                                  widget._homeBloc, dataHomePage, true);
+                            },
                             style: TextButton.styleFrom(
                               elevation: 4,
                               backgroundColor:
-                                  const Color.fromARGB(255, 255, 180, 59),
+                                  dataHomePage.buttonRemoteON == "true"
+                                      ? const Color.fromARGB(255, 255, 180, 59)
+                                      : Colors.white,
                               shadowColor: Colors.black,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0)),
@@ -345,11 +388,16 @@ class HomeScreenState extends State<HomeScreen> {
                         height: 60,
                         width: 150,
                         child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              userRepository.updateButtonRemote(
+                                  widget._homeBloc, dataHomePage, false);
+                            },
                             style: TextButton.styleFrom(
                               elevation: 4,
                               backgroundColor:
-                                  const Color.fromARGB(255, 255, 180, 59),
+                                  dataHomePage.buttonRemoteOFF == "true"
+                                      ? const Color.fromARGB(255, 255, 180, 59)
+                                      : Colors.white,
                               shadowColor: Colors.black,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0)),
@@ -379,17 +427,52 @@ class HomeScreenState extends State<HomeScreen> {
       assetAudioPath: 'assets/audio/sound_alarm.mp3',
       loopAudio: true,
       vibrate: true,
-      volume: 1,
+      volume: 0.3,
       fadeDuration: 3.0,
-      notificationTitle: 'This is the title',
-      notificationBody: 'This is the body',
+      notificationTitle: 'Alarm Warning',
+      notificationBody: '',
       enableNotificationOnKill: true,
     );
     await Alarm.set(alarmSettings: alarmSettings);
   }
 
   void _load() {
-    UserRepository userRepository = UserRepository();
     userRepository.getData(widget._homeBloc);
+  }
+}
+
+class ZoneButton extends StatelessWidget {
+  final Color? color;
+  final String text;
+  const ZoneButton({
+    super.key,
+    this.color,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 60,
+      width: 60,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: color,
+          boxShadow: const [
+            BoxShadow(
+                color: Color.fromARGB(255, 107, 107, 107),
+                offset: Offset(0, 1),
+                blurRadius: 2)
+          ]),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+            color: Colors.black,
+            fontFamily: 'DM Sans',
+            fontSize: 20,
+            fontWeight: FontWeight.bold),
+      ),
+    );
   }
 }

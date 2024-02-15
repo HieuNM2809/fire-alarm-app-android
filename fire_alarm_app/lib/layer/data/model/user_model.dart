@@ -1,5 +1,5 @@
 class UserModel {
-  String? antiTheft;
+  bool? antiTheft;
   String? buttonRemoteOFF;
   String? buttonRemoteON;
   String? fullname;
@@ -7,14 +7,14 @@ class UserModel {
   String? gasAlert;
   String? password;
   String? pump;
-  String? sos;
+  bool? sos;
   String? temperature;
   String? temperatureAlert;
   String? username;
   String? zone1;
   String? zone2;
   String? zone3;
-  String? zonee4;
+  String? zone4;
 
   UserModel(
       {this.antiTheft,
@@ -32,7 +32,7 @@ class UserModel {
       this.zone1,
       this.zone2,
       this.zone3,
-      this.zonee4});
+      this.zone4});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     antiTheft = json['antiTheft'];
@@ -50,7 +50,7 @@ class UserModel {
     zone1 = json['zone1'];
     zone2 = json['zone2'];
     zone3 = json['zone3'];
-    zonee4 = json['zonee4'];
+    zone4 = json['zone4'];
   }
 
   Map<String, dynamic> toJson() {
@@ -70,7 +70,7 @@ class UserModel {
     data['zone1'] = zone1;
     data['zone2'] = zone2;
     data['zone3'] = zone3;
-    data['zonee4'] = zonee4;
+    data['zone4'] = zone4;
     return data;
   }
 }

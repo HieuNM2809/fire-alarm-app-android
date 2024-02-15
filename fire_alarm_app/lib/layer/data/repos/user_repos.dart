@@ -31,36 +31,38 @@ class UserRepository {
     });
   }
 
-  Future<UserModel> fetchData() async {
-    UserModel? user;
-    // final ref = database.ref('user1');
-    // final GoRouterConfig goRouter = GoRouterConfig();
-
-    // ref.onValue.listen((event) {
-    //   final data = Map<String, dynamic>.from(event.snapshot.value as Map);
-    //   user = UserModel.fromJson(data);
-    //  return user;
-    // });
-    final ref = FirebaseDatabase.instance.ref('user1');
-    final snapshot = await ref.get();
-    if (snapshot.exists) {
-      final data = Map<String, dynamic>.from(snapshot.value as Map);
-      user = UserModel.fromJson(data);
-      print(">>>>>>>>>>${user.gas}");
-    } else {
-      print('No data available.');
-    }
-    return user!;
-  }
-
-  Future<void> getData(HomeBloc _homeBloc) async {
+  Future<void> getData(HomeBloc homeBloc) async {
     UserModel? user;
     final ref = database.ref('user1');
 
     ref.onValue.listen((event) {
       final data = Map<String, dynamic>.from(event.snapshot.value as Map);
       user = UserModel.fromJson(data);
-      _homeBloc.add(LoadHomeEvent(dataHomePage: user!));
+      homeBloc.add(LoadHomeEvent(dataHomePage: user!));
     });
+  }
+
+  Future<void> updateSOS(HomeBloc homeBloc, UserModel user) async {
+    final ref = database.ref('user1');
+    bool isSOS = !user.sos!;
+    await ref.update({
+      "sos": isSOS,
+    });
+  }
+
+  Future<void> updateButtonRemote(
+      HomeBloc homeBloc, UserModel user, bool isButtonRemoteON) async {
+    final ref = database.ref('user1');
+    String isButtonON = user.buttonRemoteON == "true" ? 'false' : 'true';
+    String isButtonOFF = user.buttonRemoteOFF == "true" ? 'false' : 'true';
+    if (isButtonRemoteON) {
+      await ref.update({
+        "buttonRemoteON": isButtonON,
+      });
+    } else {
+      await ref.update({
+        "buttonRemoteOFF": isButtonOFF,
+      });
+    }
   }
 }
