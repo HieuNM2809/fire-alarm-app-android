@@ -89,41 +89,7 @@ class BackgroundService {
           //   ),
           // );
 
-          await Firebase.initializeApp(
-            options: DefaultFirebaseOptions.currentPlatform,
-          );
-          await Alarm.init();
-          DatabaseReference database = FirebaseDatabase.instance.ref('user1');
-          database.onValue.listen((event) async {
-            final data = Map<String, dynamic>.from(event.snapshot.value as Map);
-            user = UserModel.fromJson(data);
-            if (user!.temperatureAlert == "true" ||
-                user!.gasAlert == "true" ||
-                user!.antiTheft == "true" ||
-                user!.pump == "true" ||
-                user!.zone1 == "true" ||
-                user!.zone2 == "true" ||
-                user!.zone3 == "true" ||
-                user!.zone4 == "true") {
-              final alarmSettings = AlarmSettings(
-                id: 1,
-                dateTime: DateTime.now(),
-                assetAudioPath: 'assets/audio/sound_alarm.mp3',
-                loopAudio: true,
-                vibrate: true,
-                volume: 0.3,
-                fadeDuration: 3.0,
-                notificationTitle: 'Alarm Warning',
-                notificationBody: '',
-                enableNotificationOnKill: true,
-              );
-              await Alarm.set(alarmSettings: alarmSettings);
-            } else {
-              if (Alarm.hasAlarm()) {
-                Alarm.stopAll();
-              }
-            }
-          });
+          await alertRunBackgroundApp(user);
           // // if you don't using custom notification, uncomment this
           // service.setForegroundNotificationInfo(
           //   title: "My App Service",
@@ -156,5 +122,43 @@ class BackgroundService {
         "device": device,
       },
     );
+  }
+
+  static Future<void> alertRunBackgroundApp(UserModel? user) async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    await Alarm.init();
+    DatabaseReference database = FirebaseDatabase.instance.ref('user1');
+    database.onValue.listen((event) async {
+      final data = Map<String, dynamic>.from(event.snapshot.value as Map);
+      user = UserModel.fromJson(data);
+      if (user!.temperatureAlert == "true" ||
+          user!.gasAlert == "true" ||
+          user!.antiTheft == "true" ||
+          user!.pump == "true" ||
+          user!.zone1 == "true" ||
+          user!.zone2 == "true" ||
+          user!.zone3 == "true" ||
+          user!.zone4 == "true") {
+        final alarmSettings = AlarmSettings(
+          id: 1,
+          dateTime: DateTime.now(),
+          assetAudioPath: 'assets/audio/sound_alarm.mp3',
+          loopAudio: true,
+          vibrate: true,
+          volume: 0.3,
+          fadeDuration: 3.0,
+          notificationTitle: 'Alarm Warning',
+          notificationBody: '',
+          enableNotificationOnKill: true,
+        );
+        await Alarm.set(alarmSettings: alarmSettings);
+      } else {
+        if (Alarm.hasAlarm()) {
+          Alarm.stopAll();
+        }
+      }
+    });
   }
 }
