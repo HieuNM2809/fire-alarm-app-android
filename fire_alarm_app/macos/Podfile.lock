@@ -1,4 +1,6 @@
 PODS:
+  - device_info_plus (0.0.1):
+    - FlutterMacOS
   - Firebase/CoreOnly (10.20.0):
     - FirebaseCore (= 10.20.0)
   - Firebase/Database (10.20.0):
@@ -7,7 +9,7 @@ PODS:
   - firebase_core (2.25.4):
     - Firebase/CoreOnly (~> 10.20.0)
     - FlutterMacOS
-  - firebase_database (10.4.5):
+  - firebase_database (10.4.6):
     - Firebase/CoreOnly (~> 10.20.0)
     - Firebase/Database (~> 10.20.0)
     - firebase_core
@@ -25,6 +27,8 @@ PODS:
     - FirebaseSharedSwift (~> 10.0)
     - leveldb-library (~> 1.22)
   - FirebaseSharedSwift (10.20.0)
+  - flutter_local_notifications (0.0.1):
+    - FlutterMacOS
   - FlutterMacOS (1.0.0)
   - GoogleUtilities/Environment (7.12.0):
     - PromisesObjC (< 3.0, >= 1.2)
@@ -41,8 +45,10 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
+  - device_info_plus (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos`)
   - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
   - firebase_database (from `Flutter/ephemeral/.symlinks/plugins/firebase_database/macos`)
+  - flutter_local_notifications (from `Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -60,10 +66,14 @@ SPEC REPOS:
     - PromisesObjC
 
 EXTERNAL SOURCES:
+  device_info_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos
   firebase_core:
     :path: Flutter/ephemeral/.symlinks/plugins/firebase_core/macos
   firebase_database:
     :path: Flutter/ephemeral/.symlinks/plugins/firebase_database/macos
+  flutter_local_notifications:
+    :path: Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
   path_provider_foundation:
@@ -72,14 +82,16 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
 
 SPEC CHECKSUMS:
+  device_info_plus: 5401765fde0b8d062a2f8eb65510fb17e77cf07f
   Firebase: 10c8cb12fb7ad2ae0c09ffc86cd9c1ab392a0031
   firebase_core: 2e1a33fd13fb581f0dc809c18be25cdc1a2e10db
-  firebase_database: ed5d1636ee63cd7cd61a209ab3e55b5eb115d600
+  firebase_database: e72a439ca90f056b138f72a6d2addf94c986d203
   FirebaseAppCheckInterop: e81bdb1cdb82f8e0cef353ba5018a8402682032c
   FirebaseCore: 28045c1560a2600d284b9c45a904fe322dc890b6
   FirebaseCoreInternal: efeeb171ac02d623bdaefe121539939821e10811
   FirebaseDatabase: 7e838abb62ac2e1a1c792cbeb51df3c4b6607f54
   FirebaseSharedSwift: 2fbf73618288b7a36b2014b957745dcdd781389e
+  flutter_local_notifications: 3805ca215b2fb7f397d78b66db91f6a747af52e4
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
   leveldb-library: e74c27d8fbd22854db7cb467968a0b8aa1db7126

@@ -1,8 +1,11 @@
 import 'package:alarm/alarm.dart';
+import 'package:fire_alarm_app/layer/data/repos/background_service.dart';
 import 'package:fire_alarm_app/layer/data/repos/user_repos.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fire_alarm_app/layer/presentation/home/index.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../utils/dimen.dart';
 import '../../../utils/image_data.dart';
@@ -79,7 +82,7 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           if (currentState is InHomeState) {
             if (currentState.dataHomePage.temperatureAlert == "true" ||
                 currentState.dataHomePage.gasAlert == "true" ||
-                currentState.dataHomePage.antiTheft! ||
+                currentState.dataHomePage.antiTheft == "true" ||
                 currentState.dataHomePage.pump == "true" ||
                 currentState.dataHomePage.zone1 == "true" ||
                 currentState.dataHomePage.zone2 == "true" ||
@@ -211,7 +214,7 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         },
                         style: TextButton.styleFrom(
                             elevation: 4,
-                            backgroundColor: dataHomePage.sos!
+                            backgroundColor: dataHomePage.sos == "true"
                                 ? const Color.fromARGB(255, 255, 180, 59)
                                 : Colors.white,
                             shadowColor: Colors.black,
@@ -223,7 +226,7 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             )),
                         child: Text("SOS",
                             style: TextStyle(
-                                color: dataHomePage.sos!
+                                color: dataHomePage.sos == "true"
                                     ? Colors.white
                                     : Colors.black,
                                 fontFamily: 'DM Sans',
@@ -271,7 +274,7 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       NotiButton(
                         textButton: 'chuông',
                         image: ImageData.notification,
-                        color: dataHomePage.antiTheft!
+                        color: dataHomePage.antiTheft == "true"
                             ? const Color.fromARGB(255, 255, 180, 59)
                             : Colors.white,
                       ),
@@ -438,6 +441,11 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   void _load() {
     userRepository.getData(widget._homeBloc);
+    Permission.notification.isDenied.then((value) {
+      if (value) {
+        Permission.notification.request();
+      }
+    });
   }
 }
 

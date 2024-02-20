@@ -9,6 +9,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // FlutterBackgroundService().invoke('setAsBackground');
   runApp(const MyApp());
 }
 

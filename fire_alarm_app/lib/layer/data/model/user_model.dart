@@ -1,5 +1,5 @@
 class UserModel {
-  bool? antiTheft;
+  String? antiTheft;
   String? buttonRemoteOFF;
   String? buttonRemoteON;
   String? fullname;
@@ -7,7 +7,7 @@ class UserModel {
   String? gasAlert;
   String? password;
   String? pump;
-  bool? sos;
+  String? sos;
   String? temperature;
   String? temperatureAlert;
   String? username;

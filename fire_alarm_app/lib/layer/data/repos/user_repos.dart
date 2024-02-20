@@ -1,23 +1,24 @@
-import 'package:fire_alarm_app/config/go_router_config.dart';
+import 'dart:async';
+
+import 'package:alarm/alarm.dart';
 import 'package:fire_alarm_app/layer/presentation/home/index.dart';
+import 'package:fire_alarm_app/layer/presentation/init_app/index.dart';
 import 'package:fire_alarm_app/main.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../presentation/home/home_bloc.dart';
-import '../../presentation/home/home_page.dart';
 import '../model/user_model.dart';
 
 class UserRepository {
   final FirebaseDatabase database;
-
+  Timer? timer;
   UserRepository({FirebaseDatabase? firebaseDatabase})
       : database = firebaseDatabase ?? FirebaseDatabase.instance;
 
   Future<void> loginApp(String userName, String password) async {
     UserModel? user;
     final ref = database.ref('user1');
-    final GoRouterConfig goRouter = GoRouterConfig();
 
     ref.onValue.listen((event) {
       final data = Map<String, dynamic>.from(event.snapshot.value as Map);
@@ -26,7 +27,7 @@ class UserRepository {
           user!.username!.contains(userName) &&
           user!.password!.contains(password)) {
         GoRouter.of(StateManager.navigatorKey.currentContext!)
-            .go(HomePage.routeName);
+            .go(InitAppPage.routeName);
       }
     });
   }
@@ -38,13 +39,14 @@ class UserRepository {
     ref.onValue.listen((event) {
       final data = Map<String, dynamic>.from(event.snapshot.value as Map);
       user = UserModel.fromJson(data);
+
       homeBloc.add(LoadHomeEvent(dataHomePage: user!));
     });
   }
 
   Future<void> updateSOS(HomeBloc homeBloc, UserModel user) async {
     final ref = database.ref('user1');
-    bool isSOS = !user.sos!;
+    bool isSOS = user.sos == "true" ? false : true;
     await ref.update({
       "sos": isSOS,
     });

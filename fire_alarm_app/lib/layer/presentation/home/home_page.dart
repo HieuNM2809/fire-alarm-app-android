@@ -17,21 +17,6 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: HomeScreen(homeBloc: _homeBloc),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 255, 180, 59),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-            backgroundColor: Colors.red,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Business',
-            backgroundColor: Colors.green,
-          ),
-        ],
-      ),
     );
   }
 }
