@@ -50,8 +50,8 @@ class InitAppScreenState extends State<InitAppScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(currentState.errorMessage),
-                Padding(
-                  padding: const EdgeInsets.only(top: 32.0),
+                const Padding(
+                  padding: EdgeInsets.only(top: 32.0),
                   child: Text('reload'),
                 ),
               ],

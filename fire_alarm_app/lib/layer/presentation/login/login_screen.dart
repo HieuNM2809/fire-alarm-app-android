@@ -1,7 +1,10 @@
 import 'package:fire_alarm_app/layer/data/repos/user_repos.dart';
+import 'package:fire_alarm_app/layer/presentation/register/register_page.dart';
+import 'package:fire_alarm_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fire_alarm_app/layer/presentation/login/index.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../utils/dimen.dart';
 
@@ -28,8 +31,7 @@ class LoginScreenState extends State<LoginScreen> {
   final FocusNode focusNode = FocusNode();
 
   final GlobalKey<FormState> loginForm = GlobalKey<FormState>();
-  TextEditingController userNameController =
-      TextEditingController(text: 'user1');
+  TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   @override
@@ -133,12 +135,25 @@ class LoginScreenState extends State<LoginScreen> {
                             child: Column(
                               children: [
                                 TextFormField(
-                                  style: const TextStyle(color: Colors.black),
+                                  focusNode: focusNode,
                                   controller: userNameController,
-                                  enabled: false,
+                                  cursorColor: Colors.orange,
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: InputDecoration(
+                                    hintText: 'Username',
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey[300]!),
+                                    ),
+                                    focusedBorder: const UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.orange),
+                                    ),
+                                  ),
                                 ),
                                 TextFormField(
                                   focusNode: focusNode,
+                                  controller: passwordController,
                                   style: const TextStyle(color: Colors.black),
                                   cursorColor: Colors.orange,
                                   decoration: InputDecoration(
@@ -152,7 +167,6 @@ class LoginScreenState extends State<LoginScreen> {
                                           BorderSide(color: Colors.orange),
                                     ),
                                   ),
-                                  controller: passwordController,
                                 )
                               ],
                             )),
@@ -194,7 +208,10 @@ class LoginScreenState extends State<LoginScreen> {
               height: 80,
               width: 80,
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  GoRouter.of(StateManager.navigatorKey.currentContext!)
+                      .go(RegisterPage.routeName);
+                },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
                 icon: const Icon(
                   Icons.add,

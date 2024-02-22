@@ -12,23 +12,26 @@ abstract class RegisterEvent {
 
 class UnRegisterEvent extends RegisterEvent {
   @override
-  Stream<RegisterState> applyAsync({RegisterState? currentState, RegisterBloc? bloc}) async* {
+  Stream<RegisterState> applyAsync(
+      {RegisterState? currentState, RegisterBloc? bloc}) async* {
     yield UnRegisterState();
   }
 }
 
 class LoadRegisterEvent extends RegisterEvent {
-   
+  final String configIndex;
+
+  LoadRegisterEvent({required this.configIndex});
   @override
   Stream<RegisterState> applyAsync(
       {RegisterState? currentState, RegisterBloc? bloc}) async* {
     try {
       yield UnRegisterState();
-      await Future.delayed(const Duration(seconds: 1));
-      yield InRegisterState('Hello world');
+      yield InRegisterState(configIndex);
     } catch (_, stackTrace) {
-      developer.log('$_', name: 'LoadRegisterEvent', error: _, stackTrace: stackTrace);
-      yield ErrorRegisterState( _.toString());
+      developer.log('$_',
+          name: 'LoadRegisterEvent', error: _, stackTrace: stackTrace);
+      yield ErrorRegisterState(_.toString());
     }
   }
 }

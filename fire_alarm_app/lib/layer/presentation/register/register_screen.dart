@@ -1,6 +1,9 @@
+import 'package:fire_alarm_app/layer/data/repos/user_repos.dart';
+import 'package:fire_alarm_app/layer/presentation/login/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fire_alarm_app/layer/presentation/register/index.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../utils/dimen.dart';
 
@@ -8,10 +11,12 @@ class RegisterScreen extends StatefulWidget {
   const RegisterScreen({
     required RegisterBloc registerBloc,
     Key? key,
+    required this.userRepository,
   })  : _registerBloc = registerBloc,
         super(key: key);
 
   final RegisterBloc _registerBloc;
+  final UserRepository userRepository;
 
   @override
   RegisterScreenState createState() {
@@ -21,10 +26,10 @@ class RegisterScreen extends StatefulWidget {
 
 class RegisterScreenState extends State<RegisterScreen> {
   RegisterScreenState();
-  final focusNode = FocusNode();
+  final focusPasswordNode = FocusNode();
+  final focusResetPasswordNode = FocusNode();
   final registerForm = GlobalKey<FormState>();
-  TextEditingController userNameController =
-      TextEditingController(text: 'user4');
+  TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController rePasswordController = TextEditingController();
 
@@ -69,7 +74,8 @@ class RegisterScreenState extends State<RegisterScreen> {
             ));
           }
           if (currentState is InRegisterState) {
-            return body();
+            userNameController.text = 'user${currentState.configIndex}';
+            return body(configIndex: currentState.configIndex);
           }
           return const Center(
             child: CircularProgressIndicator(),
@@ -77,13 +83,14 @@ class RegisterScreenState extends State<RegisterScreen> {
         });
   }
 
-  Widget body() {
+  Widget body({String? configIndex}) {
     return Stack(
       children: [
         GestureDetector(
           onTap: () {
-            if (focusNode.hasFocus) {
-              focusNode.unfocus();
+            if (focusPasswordNode.hasFocus || focusResetPasswordNode.hasFocus) {
+              focusPasswordNode.unfocus();
+              focusResetPasswordNode.unfocus();
             }
           },
           child: Center(
@@ -109,7 +116,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             color: Colors.white,
                           ),
                           const Padding(
-                            padding: EdgeInsets.only(left: 30),
+                            padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
                             child: Text(
                               "Đăng Ký",
                               style: TextStyle(
@@ -118,7 +125,24 @@ class RegisterScreenState extends State<RegisterScreen> {
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold),
                             ),
-                          )
+                          ),
+                          SizedBox(
+                              height: 80,
+                              width: 80,
+                              child: IconButton(
+                                onPressed: () {
+                                  GoRouter.of(context).go(LoginPage.routeName);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.orange,
+                                    shadowColor: Colors.black,
+                                    elevation: 2),
+                                icon: const Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                  size: 60,
+                                ),
+                              )),
                         ],
                       ),
                       //form user and password
@@ -151,9 +175,10 @@ class RegisterScreenState extends State<RegisterScreen> {
                                   enabled: false,
                                 ),
                                 TextFormField(
-                                  focusNode: focusNode,
+                                  focusNode: focusPasswordNode,
                                   style: const TextStyle(color: Colors.black),
                                   cursorColor: Colors.orange,
+                                  obscureText: true,
                                   decoration: InputDecoration(
                                     hintText: 'Mật Khẩu',
                                     hintStyle:
@@ -170,9 +195,17 @@ class RegisterScreenState extends State<RegisterScreen> {
                                   controller: passwordController,
                                 ),
                                 TextFormField(
-                                  focusNode: focusNode,
+                                  focusNode: focusResetPasswordNode,
                                   style: const TextStyle(color: Colors.black),
                                   cursorColor: Colors.orange,
+                                  obscureText: true,
+                                  validator: (value) {
+                                    if (!value!
+                                        .contains(passwordController.text)) {
+                                      return 'The re-entered password does not match';
+                                    }
+                                    return null;
+                                  },
                                   decoration: InputDecoration(
                                     hintText: 'Nhập Mật Khẩu',
                                     hintStyle:
@@ -196,7 +229,14 @@ class RegisterScreenState extends State<RegisterScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         width: double.infinity,
                         child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              if (registerForm.currentState!.validate()) {
+                                widget.userRepository.registerUser(
+                                    userNameController.text,
+                                    passwordController.text,
+                                    configIndex!);
+                              }
+                            },
                             style: TextButton.styleFrom(
                                 backgroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
@@ -217,31 +257,12 @@ class RegisterScreenState extends State<RegisterScreen> {
             ),
           ),
         ),
-        //Counter user name button
-        Positioned(
-          right: 90,
-          top: Dimen.sizeDevice.height * 0.28,
-          child: SizedBox(
-              height: 80,
-              width: 80,
-              child: IconButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    shadowColor: Colors.black,
-                    elevation: 2),
-                icon: const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 60,
-                ),
-              )),
-        ),
       ],
     );
   }
 
-  void _load() {
-    widget._registerBloc.add(LoadRegisterEvent());
+  void _load() async {
+    final configIndex = await widget.userRepository.loadConfigIndex();
+    widget._registerBloc.add(LoadRegisterEvent(configIndex: configIndex));
   }
 }

@@ -9,7 +9,6 @@ abstract class RegisterState extends Equatable {
 
 /// UnInitialized
 class UnRegisterState extends RegisterState {
-
   UnRegisterState();
 
   @override
@@ -18,22 +17,22 @@ class UnRegisterState extends RegisterState {
 
 /// Initialized
 class InRegisterState extends RegisterState {
-  InRegisterState(this.hello);
-  
-  final String hello;
+  InRegisterState(this.configIndex);
+
+  final String configIndex;
 
   @override
-  String toString() => 'InRegisterState $hello';
+  String toString() => 'InRegisterState $configIndex';
 
   @override
-  List<Object> get props => [hello];
+  List<Object> get props => [];
 }
 
 class ErrorRegisterState extends RegisterState {
   ErrorRegisterState(this.errorMessage);
- 
+
   final String errorMessage;
-  
+
   @override
   String toString() => 'ErrorRegisterState';
 

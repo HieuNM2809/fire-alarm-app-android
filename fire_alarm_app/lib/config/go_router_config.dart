@@ -14,7 +14,7 @@ class GoRouterConfig {
       GoRoute(
         path: '/',
         builder: (context, state) {
-          return InitAppPage();
+          return LoginPage();
         },
       ),
       GoRoute(
