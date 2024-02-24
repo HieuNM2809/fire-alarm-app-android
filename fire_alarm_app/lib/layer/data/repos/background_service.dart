@@ -3,12 +3,12 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:alarm/alarm.dart';
-import 'package:alarm/model/alarm_settings.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:fire_alarm_app/utils/constants.dart';
+import 'package:fire_alarm_app/utils/share_pref.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 
@@ -45,8 +45,8 @@ class BackgroundService {
 
     // For flutter prior to version 3.0.0
     // We have to register the plugin manually
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
+    // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    //     FlutterLocalNotificationsPlugin();
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setString("hello", "world");
@@ -129,7 +129,9 @@ class BackgroundService {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     await Alarm.init();
-    DatabaseReference database = FirebaseDatabase.instance.ref('user1');
+    SharePref sharePref = SharePref();
+    final username = await sharePref.read('username');
+    DatabaseReference database = FirebaseDatabase.instance.ref(username);
     database.onValue.listen((event) async {
       final data = Map<String, dynamic>.from(event.snapshot.value as Map);
       user = UserModel.fromJson(data);
@@ -147,7 +149,7 @@ class BackgroundService {
           assetAudioPath: 'assets/audio/sound_alarm.mp3',
           loopAudio: true,
           vibrate: true,
-          volume: 0.3,
+          volume: 0.8,
           fadeDuration: 3.0,
           notificationTitle: 'Alarm Warning',
           notificationBody: '',

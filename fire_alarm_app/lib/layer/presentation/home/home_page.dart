@@ -12,6 +12,10 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   final _homeBloc = HomeBloc(const UnHomeState());
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

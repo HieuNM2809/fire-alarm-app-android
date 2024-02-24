@@ -430,7 +430,7 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       assetAudioPath: 'assets/audio/sound_alarm.mp3',
       loopAudio: true,
       vibrate: true,
-      volume: 0.3,
+      volume: 0.8,
       fadeDuration: 3.0,
       notificationTitle: 'Alarm Warning',
       notificationBody: '',

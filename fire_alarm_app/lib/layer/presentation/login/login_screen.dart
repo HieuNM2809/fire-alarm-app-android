@@ -1,4 +1,5 @@
 import 'package:fire_alarm_app/layer/data/repos/user_repos.dart';
+import 'package:fire_alarm_app/layer/presentation/login/login_event.dart';
 import 'package:fire_alarm_app/layer/presentation/register/register_page.dart';
 import 'package:fire_alarm_app/main.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,8 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenState extends State<LoginScreen> {
   LoginScreenState();
 
-  final FocusNode focusNode = FocusNode();
+  final FocusNode usernameFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
 
   final GlobalKey<FormState> loginForm = GlobalKey<FormState>();
   TextEditingController userNameController = TextEditingController();
@@ -77,6 +79,9 @@ class LoginScreenState extends State<LoginScreen> {
           if (currentState is InLoginState) {
             return body();
           }
+          if (currentState is InLoginButtonState) {
+            return body();
+          }
           return const Center(
             child: CircularProgressIndicator(),
           );
@@ -88,8 +93,9 @@ class LoginScreenState extends State<LoginScreen> {
       children: [
         GestureDetector(
           onTap: () {
-            if (focusNode.hasFocus) {
-              focusNode.unfocus();
+            if (usernameFocusNode.hasFocus || passwordFocusNode.hasFocus) {
+              usernameFocusNode.unfocus();
+              passwordFocusNode.unfocus();
             }
           },
           child: Center(
@@ -115,7 +121,7 @@ class LoginScreenState extends State<LoginScreen> {
                             color: Colors.orange,
                           ),
                           const Padding(
-                            padding: EdgeInsets.only(left: 30),
+                            padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
                             child: Text(
                               "Đăng Nhập",
                               style: TextStyle(
@@ -124,7 +130,24 @@ class LoginScreenState extends State<LoginScreen> {
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold),
                             ),
-                          )
+                          ),
+                          SizedBox(
+                              height: 80,
+                              width: 80,
+                              child: IconButton(
+                                onPressed: () {
+                                  GoRouter.of(StateManager
+                                          .navigatorKey.currentContext!)
+                                      .go(RegisterPage.routeName);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.orange),
+                                icon: const Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                  size: 60,
+                                ),
+                              )),
                         ],
                       ),
                       //form user and password
@@ -135,7 +158,7 @@ class LoginScreenState extends State<LoginScreen> {
                             child: Column(
                               children: [
                                 TextFormField(
-                                  focusNode: focusNode,
+                                  focusNode: usernameFocusNode,
                                   controller: userNameController,
                                   cursorColor: Colors.orange,
                                   style: const TextStyle(color: Colors.black),
@@ -152,10 +175,20 @@ class LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                                 TextFormField(
-                                  focusNode: focusNode,
+                                  focusNode: passwordFocusNode,
                                   controller: passwordController,
                                   style: const TextStyle(color: Colors.black),
                                   cursorColor: Colors.orange,
+                                  obscureText: true,
+                                  onChanged: (value) {
+                                    if (userNameController.text != '' &&
+                                        passwordController.text != '') {
+                                      widget._loginBloc
+                                          .add(LoadLoginButtonEvent());
+                                    } else {
+                                      widget._loginBloc.add(LoadLoginEvent());
+                                    }
+                                  },
                                   decoration: InputDecoration(
                                     hintText: 'Mật Khẩu',
                                     enabledBorder: UnderlineInputBorder(
@@ -185,12 +218,18 @@ class LoginScreenState extends State<LoginScreen> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5.0)),
                                 side: BorderSide(
-                                  color: Colors.grey[300]!,
+                                  color: (userNameController.text != '' &&
+                                          passwordController.text != '')
+                                      ? Colors.orange
+                                      : Colors.grey[300]!,
                                   width: 2,
                                 )),
                             child: Text("Xác Nhận",
                                 style: TextStyle(
-                                    color: Colors.grey[300],
+                                    color: (userNameController.text != '' &&
+                                            passwordController.text != '')
+                                        ? Colors.orange
+                                        : Colors.grey[300],
                                     fontFamily: 'DM Sans',
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold))),
@@ -199,26 +238,6 @@ class LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-        ),
-        //Counter user name button
-        Positioned(
-          right: 60,
-          top: Dimen.sizeDevice.height * 0.2,
-          child: SizedBox(
-              height: 80,
-              width: 80,
-              child: IconButton(
-                onPressed: () {
-                  GoRouter.of(StateManager.navigatorKey.currentContext!)
-                      .go(RegisterPage.routeName);
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-                icon: const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 60,
-                ),
-              )),
         ),
       ],
     );

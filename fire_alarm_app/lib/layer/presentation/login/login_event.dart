@@ -6,29 +6,41 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class LoginEvent {
-  Stream<LoginState> applyAsync(
-      {LoginState currentState, LoginBloc bloc});
+  Stream<LoginState> applyAsync({LoginState currentState, LoginBloc bloc});
 }
 
 class UnLoginEvent extends LoginEvent {
   @override
-  Stream<LoginState> applyAsync({LoginState? currentState, LoginBloc? bloc}) async* {
+  Stream<LoginState> applyAsync(
+      {LoginState? currentState, LoginBloc? bloc}) async* {
     yield UnLoginState();
   }
 }
 
 class LoadLoginEvent extends LoginEvent {
-   
   @override
   Stream<LoginState> applyAsync(
       {LoginState? currentState, LoginBloc? bloc}) async* {
     try {
-      yield UnLoginState();
-      await Future.delayed(const Duration(seconds: 1));
-      yield InLoginState('Hello world');
+      yield InLoginState();
     } catch (_, stackTrace) {
-      developer.log('$_', name: 'LoadLoginEvent', error: _, stackTrace: stackTrace);
-      yield ErrorLoginState( _.toString());
+      developer.log('$_',
+          name: 'LoadLoginEvent', error: _, stackTrace: stackTrace);
+      yield ErrorLoginState(_.toString());
+    }
+  }
+}
+
+class LoadLoginButtonEvent extends LoginEvent {
+  @override
+  Stream<LoginState> applyAsync(
+      {LoginState? currentState, LoginBloc? bloc}) async* {
+    try {
+      yield InLoginButtonState();
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'LoadLoginEvent', error: _, stackTrace: stackTrace);
+      yield ErrorLoginState(_.toString());
     }
   }
 }

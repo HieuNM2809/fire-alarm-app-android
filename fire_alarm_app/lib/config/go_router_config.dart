@@ -1,3 +1,4 @@
+import 'package:fire_alarm_app/layer/presentation/app_root.dart';
 import 'package:fire_alarm_app/layer/presentation/init_app/index.dart';
 import 'package:fire_alarm_app/layer/presentation/login/index.dart';
 import 'package:fire_alarm_app/layer/presentation/register/index.dart';
@@ -14,7 +15,13 @@ class GoRouterConfig {
       GoRoute(
         path: '/',
         builder: (context, state) {
-          return LoginPage();
+          return const AppRoot();
+        },
+      ),
+      GoRoute(
+        path: AppRoot.routeName,
+        builder: (context, state) {
+          return const AppRoot();
         },
       ),
       GoRoute(
@@ -26,7 +33,7 @@ class GoRouterConfig {
       GoRoute(
         path: LoginPage.routeName,
         builder: (context, state) {
-          return LoginPage();
+          return const LoginPage();
         },
       ),
       GoRoute(

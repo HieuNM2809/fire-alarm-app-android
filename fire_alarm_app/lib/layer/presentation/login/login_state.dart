@@ -9,7 +9,6 @@ abstract class LoginState extends Equatable {
 
 /// UnInitialized
 class UnLoginState extends LoginState {
-
   UnLoginState();
 
   @override
@@ -18,22 +17,22 @@ class UnLoginState extends LoginState {
 
 /// Initialized
 class InLoginState extends LoginState {
-  InLoginState(this.hello);
-  
-  final String hello;
+  @override
+  String toString() => 'InLoginState ';
 
   @override
-  String toString() => 'InLoginState $hello';
+  List<Object> get props => [];
+}
 
-  @override
-  List<Object> get props => [hello];
+class InLoginButtonState extends LoginState {
+  InLoginButtonState();
 }
 
 class ErrorLoginState extends LoginState {
   ErrorLoginState(this.errorMessage);
- 
+
   final String errorMessage;
-  
+
   @override
   String toString() => 'ErrorLoginState';
 
