@@ -1,6 +1,8 @@
 import 'package:fire_alarm_app/layer/data/repos/user_repos.dart';
 import 'package:fire_alarm_app/utils/constants.dart';
 import 'package:fire_alarm_app/utils/dimen.dart';
+import 'package:fire_alarm_app/utils/font_data.dart';
+import 'package:fire_alarm_app/utils/text_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -105,24 +107,27 @@ class UserScreenState extends State<UserScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'Tài Khoản',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    TextData.accountTilte,
+                    style: FontData.dMSans20Bold(),
                   ),
                 ),
                 const Divider(
                   height: 2,
                   color: Colors.black,
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('THÔNG TIN CHUNG'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    TextData.informationAccount,
+                    style: FontData.dMSans20Bold(fontWeight: FontWeight.normal),
+                  ),
                 ),
                 Row(
                   children: [
-                    const Text('Họ và tên:'),
+                    Text(TextData.fullNameTilte),
                     const SizedBox(
                       width: 100,
                     ),
@@ -131,7 +136,7 @@ class UserScreenState extends State<UserScreen> {
                 ),
                 Row(
                   children: [
-                    const Text('Username:'),
+                    Text(TextData.userNameChangeAccountTilte),
                     const SizedBox(
                       width: 100,
                     ),
@@ -147,11 +152,11 @@ class UserScreenState extends State<UserScreen> {
                   height: 2,
                   color: Colors.black,
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'THAY ĐỔI THÔNG TIN',
-                    style: TextStyle(fontSize: 20),
+                    TextData.changeInformationAccount,
+                    style: FontData.dMSans20Bold(fontWeight: FontWeight.normal),
                   ),
                 ),
                 Form(
@@ -177,7 +182,7 @@ class UserScreenState extends State<UserScreen> {
                           decoration: InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
-                            hintText: 'Họ và tên',
+                            hintText: TextData.fullname,
                             hintStyle: const TextStyle(color: Colors.grey),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey[300]!),
@@ -211,7 +216,7 @@ class UserScreenState extends State<UserScreen> {
                           decoration: InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
-                            hintText: 'Nhập mật khẩu cũ',
+                            hintText: TextData.oldPasswordTilte,
                             hintStyle: const TextStyle(color: Colors.grey),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey[300]!),
@@ -245,7 +250,7 @@ class UserScreenState extends State<UserScreen> {
                           decoration: InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
-                            hintText: 'Nhập mật khẩu mới',
+                            hintText: TextData.newPasswordTilte,
                             hintStyle: const TextStyle(color: Colors.grey),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey[300]!),
@@ -279,7 +284,7 @@ class UserScreenState extends State<UserScreen> {
                           decoration: InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
-                            hintText: 'Xác nhận mật khẩu mới',
+                            hintText: TextData.reNewPasswordTitle,
                             hintStyle: const TextStyle(color: Colors.grey),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey[300]!),
@@ -304,66 +309,31 @@ class UserScreenState extends State<UserScreen> {
                             await userRepository.logOutApp();
                           },
                           style: TextButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0)),
-                              side: const BorderSide(
-                                color: Colors.white,
-                                width: 2,
-                              )),
-                          child: const Text("Đăng xuất",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'DM Sans',
-                                fontSize: 20,
-                              ))),
+                            backgroundColor: Colors.red,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0)),
+                          ),
+                          child: Text(TextData.logoutTitle,
+                              style: FontData.dMSans20Bold(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.normal))),
                       TextButton(
                           onPressed: () async {
-                            if (fullnameController.text != '' &&
-                                oldPasswordController.text != '' &&
-                                newPasswordController.text != '' &&
-                                resetPasswordController.text != '') {
-                              if ((newPasswordController.text ==
-                                  resetPasswordController.text)) {
-                                userRepository.updatePassword(
-                                    oldPasswordController.text,
-                                    newPasswordController.text,
-                                    fullnameController.text);
-                              } else {
-                                final snackBar = SnackBar(
-                                  content: const Text(
-                                      "password and resetPassword don't match"),
-                                  action: SnackBarAction(
-                                    label: 'Undo',
-                                    onPressed: () {
-                                      // Some code to undo the change.
-                                    },
-                                  ),
-                                );
-
-                                // Find the ScaffoldMessenger in the widget tree
-                                // and use it to show a SnackBar.
-                                ScaffoldMessenger.of(StateManager
-                                        .navigatorKey.currentContext!)
-                                    .showSnackBar(snackBar);
-                              }
-                            }
+                            userRepository.updatePassword(
+                                oldPasswordController.text,
+                                newPasswordController.text,
+                                resetPasswordController.text,
+                                fullnameController.text);
                           },
                           style: TextButton.styleFrom(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 255, 180, 59),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0)),
-                              side: const BorderSide(
-                                color: Colors.white,
-                                width: 2,
-                              )),
-                          child: const Text("Thay Đổi",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'DM Sans',
-                                fontSize: 20,
-                              ))),
+                            backgroundColor:
+                                const Color.fromARGB(255, 255, 180, 59),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0)),
+                          ),
+                          child: Text(TextData.changeTitle,
+                              style: FontData.dMSans20Bold(
+                                  fontWeight: FontWeight.normal))),
                     ],
                   ),
                 )

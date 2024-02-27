@@ -1,7 +1,10 @@
 import 'package:fire_alarm_app/layer/data/repos/user_repos.dart';
-import 'package:fire_alarm_app/layer/presentation/login/login_event.dart';
 import 'package:fire_alarm_app/layer/presentation/register/register_page.dart';
 import 'package:fire_alarm_app/main.dart';
+import 'package:fire_alarm_app/utils/font_data.dart';
+import 'package:fire_alarm_app/utils/text_data.dart';
+import 'package:fire_alarm_app/utils/validation.dart';
+import 'package:fire_alarm_app/utils/widgets/flush_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fire_alarm_app/layer/presentation/login/index.dart';
@@ -31,8 +34,9 @@ class LoginScreenState extends State<LoginScreen> {
 
   final FocusNode usernameFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
-
   final GlobalKey<FormState> loginForm = GlobalKey<FormState>();
+  final FlushBar flushBar = FlushBar();
+
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -104,7 +108,7 @@ class LoginScreenState extends State<LoginScreen> {
               shadowColor: Colors.black,
               child: Container(
                 height: Dimen.sizeDevice.height * 0.5,
-                width: Dimen.sizeDevice.width * 0.6,
+                width: Dimen.sizeDevice.width * 0.7,
                 decoration: const BoxDecoration(
                   color: Colors.white,
                 ),
@@ -113,41 +117,46 @@ class LoginScreenState extends State<LoginScreen> {
                     children: [
                       //Text 'Đăng Nhập'
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            height: 40,
-                            width: 5,
-                            color: Colors.orange,
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                            child: Text(
-                              "Đăng Nhập",
-                              style: TextStyle(
-                                  color: Colors.orange,
-                                  fontFamily: 'DM Sans',
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          SizedBox(
-                              height: 80,
-                              width: 80,
-                              child: IconButton(
-                                onPressed: () {
-                                  GoRouter.of(StateManager
-                                          .navigatorKey.currentContext!)
-                                      .go(RegisterPage.routeName);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.orange),
-                                icon: const Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                  size: 60,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 40,
+                                width: 5,
+                                color: Colors.orange,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                child: Text(
+                                  TextData.loginTilte,
+                                  style: FontData.dMSans20Bold(
+                                      color: Colors.orange),
                                 ),
-                              )),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: SizedBox(
+                                height: 80,
+                                width: 80,
+                                child: IconButton(
+                                  onPressed: () {
+                                    GoRouter.of(StateManager
+                                            .navigatorKey.currentContext!)
+                                        .go(RegisterPage.routeName);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.orange),
+                                  icon: const Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                    size: 60,
+                                  ),
+                                )),
+                          ),
                         ],
                       ),
                       //form user and password
@@ -163,7 +172,7 @@ class LoginScreenState extends State<LoginScreen> {
                                   cursorColor: Colors.orange,
                                   style: const TextStyle(color: Colors.black),
                                   decoration: InputDecoration(
-                                    hintText: 'Username',
+                                    hintText: TextData.usernameTilte,
                                     enabledBorder: UnderlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.grey[300]!),
@@ -190,7 +199,7 @@ class LoginScreenState extends State<LoginScreen> {
                                     }
                                   },
                                   decoration: InputDecoration(
-                                    hintText: 'Mật Khẩu',
+                                    hintText: TextData.passwordTilte,
                                     enabledBorder: UnderlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.grey[300]!),
@@ -210,9 +219,15 @@ class LoginScreenState extends State<LoginScreen> {
                         width: double.infinity,
                         child: TextButton(
                             onPressed: () {
-                              widget.userRepository.loginApp(
-                                  userNameController.text,
-                                  passwordController.text);
+                              if (userNameController.text != "" ||
+                                  passwordController.text != "") {
+                                widget.userRepository.loginApp(
+                                    userNameController.text,
+                                    passwordController.text);
+                              } else {
+                                Validation.loginValidation(LoginValidationType
+                                    .passwordOrUsernameEmpty);
+                              }
                             },
                             style: TextButton.styleFrom(
                                 shape: RoundedRectangleBorder(
@@ -224,15 +239,13 @@ class LoginScreenState extends State<LoginScreen> {
                                       : Colors.grey[300]!,
                                   width: 2,
                                 )),
-                            child: Text("Xác Nhận",
-                                style: TextStyle(
-                                    color: (userNameController.text != '' &&
-                                            passwordController.text != '')
-                                        ? Colors.orange
-                                        : Colors.grey[300],
-                                    fontFamily: 'DM Sans',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold))),
+                            child: Text(TextData.confirmTilte,
+                                style: FontData.dMSans20Bold(
+                                  color: (userNameController.text != '' &&
+                                          passwordController.text != '')
+                                      ? Colors.orange
+                                      : Colors.grey[300],
+                                ))),
                       )
                     ]),
               ),

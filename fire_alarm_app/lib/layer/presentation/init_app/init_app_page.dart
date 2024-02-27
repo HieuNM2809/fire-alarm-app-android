@@ -48,23 +48,33 @@ class InitAppPageState extends State<InitAppPage> {
             backgroundColor: const Color.fromARGB(255, 255, 180, 59),
             currentIndex: activeIndex,
             elevation: 0,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
             onTap: (value) =>
                 _initAppBloc.add(ChangePageInitAppEvent(index: value)),
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 activeIcon: Icon(
-                  Icons.home,
+                  size: 40,
+                  Icons.home_outlined,
                   color: Colors.white,
                 ),
-                icon: Icon(Icons.home),
+                icon: Icon(
+                  Icons.home_outlined,
+                  size: 40,
+                ),
                 label: 'Home',
               ),
               BottomNavigationBarItem(
                 activeIcon: Icon(
-                  Icons.person,
+                  Icons.person_2_outlined,
+                  size: 40,
                   color: Colors.white,
                 ),
-                icon: Icon(Icons.person),
+                icon: Icon(
+                  Icons.person_2_outlined,
+                  size: 40,
+                ),
                 label: 'Business',
               ),
             ],

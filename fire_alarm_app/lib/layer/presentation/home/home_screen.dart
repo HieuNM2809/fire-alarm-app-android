@@ -1,13 +1,13 @@
 import 'package:alarm/alarm.dart';
-import 'package:fire_alarm_app/layer/data/repos/background_service.dart';
 import 'package:fire_alarm_app/layer/data/repos/user_repos.dart';
+import 'package:fire_alarm_app/utils/text_data.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fire_alarm_app/layer/presentation/home/index.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../utils/dimen.dart';
+import '../../../utils/font_data.dart';
 import '../../../utils/image_data.dart';
 import '../../../utils/widgets/noti_button.dart';
 import '../../data/model/user_model.dart';
@@ -27,38 +27,18 @@ class HomeScreen extends StatefulWidget {
   }
 }
 
-class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+class HomeScreenState extends State<HomeScreen> {
   HomeScreenState();
   final UserRepository userRepository = UserRepository();
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
     super.initState();
-    Alarm.init();
     _load();
   }
 
   @override
   void dispose() {
-    if (Alarm.hasAlarm()) {
-      Alarm.stop(1);
-    }
-
-    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.inactive) {
-      if (Alarm.hasAlarm()) {
-        Alarm.stopAll();
-      }
-    }
-    if (state == AppLifecycleState.resumed) {
-      userRepository.getData(widget._homeBloc);
-    }
   }
 
   @override
@@ -80,18 +60,18 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             );
           }
           if (currentState is InHomeState) {
-            if (currentState.dataHomePage.temperatureAlert == "true" ||
-                currentState.dataHomePage.gasAlert == "true" ||
-                currentState.dataHomePage.antiTheft == "true" ||
-                currentState.dataHomePage.pump == "true" ||
-                currentState.dataHomePage.zone1 == "true" ||
-                currentState.dataHomePage.zone2 == "true" ||
-                currentState.dataHomePage.zone3 == "true" ||
-                currentState.dataHomePage.zone4 == "true") {
-              alarmFunction();
-            } else {
-              Alarm.stopAll();
-            }
+            // if (currentState.dataHomePage.temperatureAlert == "true" ||
+            //     currentState.dataHomePage.gasAlert == "true" ||
+            //     currentState.dataHomePage.antiTheft == "true" ||
+            //     currentState.dataHomePage.pump == "true" ||
+            //     currentState.dataHomePage.zone1 == "true" ||
+            //     currentState.dataHomePage.zone2 == "true" ||
+            //     currentState.dataHomePage.zone3 == "true" ||
+            //     currentState.dataHomePage.zone4 == "true") {
+            //   alarmFunction();
+            // } else {
+            //   Alarm.stopAll();
+            // }
             return body(currentState.dataHomePage);
           }
           return const Center(
@@ -114,14 +94,11 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.black, width: 0.5)),
-                child: const Align(
+                child: Align(
                   alignment: Alignment.center,
                   child: Text(
                     "CÔNG TY TNHH THIÊN PHƯỚC LỘC",
-                    style: TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
+                    style: FontData.dMSans16Bold(),
                   ),
                 ),
               ),
@@ -137,14 +114,10 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   decoration: const BoxDecoration(
                     color: Color.fromARGB(255, 255, 180, 59),
                   ),
-                  child: const Align(
+                  child: Align(
                     alignment: Alignment.center,
                     child: Text("THIẾT BỊ BÁO CHÁY",
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontFamily: 'DM Sans',
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold)),
+                        style: FontData.dMSans20Bold(color: Colors.red)),
                   ),
                 ),
               ),
@@ -172,11 +145,7 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               alignment: Alignment.center,
                               child: Text(
                                   "NHIỆT ĐỘ: ${dataHomePage.temperature}",
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: 'DM Sans',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
+                                  style: FontData.dMSans16Bold()),
                             ),
                           ),
                         ),
@@ -193,11 +162,7 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             child: Align(
                               alignment: Alignment.center,
                               child: Text("Khí Gas: ${dataHomePage.gas}",
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: 'DM Sans',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
+                                  style: FontData.dMSans16Bold()),
                             ),
                           ),
                         ),
@@ -225,13 +190,10 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               width: 1,
                             )),
                         child: Text("SOS",
-                            style: TextStyle(
+                            style: FontData.dMSans14Bold(
                                 color: dataHomePage.sos == "true"
                                     ? Colors.white
-                                    : Colors.black,
-                                fontFamily: 'DM Sans',
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold))),
+                                    : Colors.black))),
                   )
                 ],
               ),
@@ -247,7 +209,7 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       NotiButton(
-                        textButton: 'nhiệt độ',
+                        textButton: TextData.temperatureButton,
                         image: ImageData.temperature,
                         color: dataHomePage.temperatureAlert == "true"
                             ? const Color.fromARGB(255, 255, 180, 59)
@@ -257,7 +219,7 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         width: 100,
                       ),
                       NotiButton(
-                        textButton: 'khí gas',
+                        textButton: TextData.gasStationButton,
                         image: ImageData.gasStation,
                         color: dataHomePage.gasAlert == "true"
                             ? const Color.fromARGB(255, 255, 180, 59)
@@ -272,7 +234,7 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       NotiButton(
-                        textButton: 'chuông',
+                        textButton: TextData.notificationButton,
                         image: ImageData.notification,
                         color: dataHomePage.antiTheft == "true"
                             ? const Color.fromARGB(255, 255, 180, 59)
@@ -282,7 +244,7 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         width: 100,
                       ),
                       NotiButton(
-                        textButton: 'bơm',
+                        textButton: TextData.pumpButton,
                         image: ImageData.pump,
                         color: dataHomePage.pump == "true"
                             ? const Color.fromARGB(255, 255, 180, 59)
@@ -380,12 +342,7 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0)),
                             ),
-                            child: const Text("ON",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'DM Sans',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold))),
+                            child: Text("ON", style: FontData.dMSans14Bold())),
                       ),
                       SizedBox(
                         height: 60,
@@ -405,12 +362,7 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0)),
                             ),
-                            child: const Text("OFF",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'DM Sans',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold))),
+                            child: Text("OFF", style: FontData.dMSans14Bold())),
                       ),
                     ],
                   ),
@@ -475,11 +427,7 @@ class ZoneButton extends StatelessWidget {
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style: const TextStyle(
-            color: Colors.black,
-            fontFamily: 'DM Sans',
-            fontSize: 20,
-            fontWeight: FontWeight.bold),
+        style: FontData.dMSans20Bold(),
       ),
     );
   }
