@@ -13,10 +13,10 @@ packages:
     dependency: "direct main"
     description:
       name: alarm
-      sha256: "31607e57984b73a5d1c6d534f9acac0197fdc04916a7c4676600d42455da7d05"
+      sha256: "3f6616475cc33018228f9bfcda671ed1afb54e5afd8c9729cc96259d5215b31e"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.11"
+    version: "3.0.10"
   another_flushbar:
     dependency: "direct main"
     description:

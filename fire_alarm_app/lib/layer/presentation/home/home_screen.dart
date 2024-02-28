@@ -375,21 +375,21 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> alarmFunction() async {
-    final alarmSettings = AlarmSettings(
-      id: 1,
-      dateTime: DateTime.now(),
-      assetAudioPath: 'assets/audio/sound_alarm.mp3',
-      loopAudio: true,
-      vibrate: true,
-      volume: 0.8,
-      fadeDuration: 3.0,
-      notificationTitle: 'Alarm Warning',
-      notificationBody: '',
-      enableNotificationOnKill: true,
-    );
-    await Alarm.set(alarmSettings: alarmSettings);
-  }
+  // Future<void> alarmFunction() async {
+  //   final alarmSettings = AlarmSettings(
+  //     id: 1,
+  //     dateTime: DateTime.now(),
+  //     assetAudioPath: 'assets/audio/sound_alarm.mp3',
+  //     loopAudio: true,
+  //     vibrate: true,
+  //     volume: 0.8,
+  //     fadeDuration: 3.0,
+  //     notificationTitle: 'Alarm Warning',
+  //     notificationBody: '',
+  //     enableNotificationOnKill: true,
+  //   );
+  //   await Alarm.set(alarmSettings: alarmSettings);
+  // }
 
   void _load() {
     userRepository.getData(widget._homeBloc);

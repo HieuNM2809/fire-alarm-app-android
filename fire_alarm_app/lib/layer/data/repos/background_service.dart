@@ -109,7 +109,7 @@ class BackgroundService {
           user.zone2 == "true" ||
           user.zone3 == "true" ||
           user.zone4 == "true") {
-        Alarm.getAlarm(1);
+        Alarm.set(alarmSettings: alarmSettings);
       } else {
         if (Alarm.hasAlarm()) {
           Alarm.stopAll();

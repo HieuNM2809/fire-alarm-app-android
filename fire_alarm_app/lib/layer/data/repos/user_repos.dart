@@ -39,7 +39,7 @@ class UserRepository {
         sharePref.save('username', userName);
         sharePref.save('password', password);
         Constanst.userModel = user!;
-        await BackgroundService().initializeService();
+        BackgroundService().initializeService();
         FlutterBackgroundService().invoke('setAsForeground');
         GoRouter.of(StateManager.navigatorKey.currentContext!)
             .go(InitAppPage.routeName);
