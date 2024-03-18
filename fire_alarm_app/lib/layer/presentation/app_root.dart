@@ -1,5 +1,4 @@
 import 'package:fire_alarm_app/layer/data/repos/user_repos.dart';
-import 'package:fire_alarm_app/layer/presentation/home/index.dart';
 import 'package:fire_alarm_app/layer/presentation/login/index.dart';
 import 'package:fire_alarm_app/main.dart';
 import 'package:fire_alarm_app/utils/share_pref.dart';

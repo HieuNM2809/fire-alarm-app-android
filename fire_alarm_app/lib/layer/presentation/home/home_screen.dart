@@ -2,6 +2,7 @@ import 'package:alarm/alarm.dart';
 import 'package:fire_alarm_app/layer/data/repos/user_repos.dart';
 import 'package:fire_alarm_app/utils/text_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fire_alarm_app/layer/presentation/home/index.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -11,6 +12,7 @@ import '../../../utils/font_data.dart';
 import '../../../utils/image_data.dart';
 import '../../../utils/widgets/noti_button.dart';
 import '../../data/model/user_model.dart';
+import '../../data/repos/background_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -30,6 +32,7 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
   HomeScreenState();
   final UserRepository userRepository = UserRepository();
+  final service = FlutterBackgroundService();
   @override
   void initState() {
     super.initState();
@@ -60,18 +63,6 @@ class HomeScreenState extends State<HomeScreen> {
             );
           }
           if (currentState is InHomeState) {
-            // if (currentState.dataHomePage.temperatureAlert == "true" ||
-            //     currentState.dataHomePage.gasAlert == "true" ||
-            //     currentState.dataHomePage.antiTheft == "true" ||
-            //     currentState.dataHomePage.pump == "true" ||
-            //     currentState.dataHomePage.zone1 == "true" ||
-            //     currentState.dataHomePage.zone2 == "true" ||
-            //     currentState.dataHomePage.zone3 == "true" ||
-            //     currentState.dataHomePage.zone4 == "true") {
-            //   alarmFunction();
-            // } else {
-            //   Alarm.stopAll();
-            // }
             return body(currentState.dataHomePage);
           }
           return const Center(
@@ -392,7 +383,15 @@ class HomeScreenState extends State<HomeScreen> {
   // }
 
   void _load() {
-    userRepository.getData(widget._homeBloc);
+    BackgroundService().initializeService();
+    service.invoke('setAsForeground');
+    service.isRunning().then((value) {
+      if (value) {
+        print(">>>>>>>$value");
+        userRepository.getData(widget._homeBloc);
+      }
+    });
+
     Permission.notification.isDenied.then((value) {
       if (value) {
         Permission.notification.request();

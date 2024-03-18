@@ -141,15 +141,13 @@ class UserRepository {
   Future<void> updateButtonRemote(
       HomeBloc homeBloc, UserModel user, bool isButtonRemoteON) async {
     final ref = database.ref(Constanst.userModel.username);
-    String isButtonON = user.buttonRemoteON == "true" ? 'false' : 'true';
-    String isButtonOFF = user.buttonRemoteOFF == "true" ? 'false' : 'true';
     if (isButtonRemoteON) {
       await ref.update({
-        "buttonRemoteON": isButtonON,
+        "buttonRemoteON": "true",
       });
     } else {
       await ref.update({
-        "buttonRemoteOFF": isButtonOFF,
+        "buttonRemoteOFF": "true",
       });
     }
   }

@@ -3,4 +3,5 @@ class ImageData {
   static const notification = 'assets/images/notification.png';
   static const gasStation = 'assets/images/gas_station.png';
   static const pump = 'assets/images/pump.png';
+  static const loading = "assets/images/loading.gif";
 }

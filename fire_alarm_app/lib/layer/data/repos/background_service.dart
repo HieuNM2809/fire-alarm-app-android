@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:alarm/alarm.dart';
+import 'package:fire_alarm_app/utils/constants.dart';
 import 'package:fire_alarm_app/utils/share_pref.dart';
 import 'package:fire_alarm_app/utils/text_data.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -46,7 +47,7 @@ class BackgroundService {
       DatabaseReference database = FirebaseDatabase.instance.ref(username);
       // Only available for flutter 3.0.0 and later
       DartPluginRegistrant.ensureInitialized();
-      Alarm.init();
+      await Alarm.init();
       final alarmSettings = AlarmSettings(
         id: 1,
         dateTime: DateTime.now(),
@@ -58,6 +59,7 @@ class BackgroundService {
         notificationTitle: 'Cảnh Báo',
         notificationBody: '',
       );
+
       if (service is AndroidServiceInstance) {
         service.on('setAsForeground').listen((event) {
           service.setAsForegroundService();
@@ -77,7 +79,7 @@ class BackgroundService {
       });
 
       // bring to foreground
-      time = Timer.periodic(const Duration(seconds: 5), (timer) async {
+      time = Timer.periodic(const Duration(seconds: 1), (timer) async {
         if (service is AndroidServiceInstance) {
           if (await service.isForegroundService()) {
             await alertRunBackgroundApp(user, database, alarmSettings);
@@ -98,23 +100,25 @@ class BackgroundService {
 
   static Future<void> alertRunBackgroundApp(UserModel user,
       DatabaseReference database, AlarmSettings alarmSettings) async {
-    database.onValue.listen((event) async {
-      final data = Map<String, dynamic>.from(event.snapshot.value as Map);
-      user = UserModel.fromJson(data);
-      if (user.temperatureAlert == "true" ||
-          user.gasAlert == "true" ||
-          user.antiTheft == "true" ||
-          user.pump == "true" ||
-          user.zone1 == "true" ||
-          user.zone2 == "true" ||
-          user.zone3 == "true" ||
-          user.zone4 == "true") {
-        Alarm.set(alarmSettings: alarmSettings);
-      } else {
-        if (Alarm.hasAlarm()) {
-          Alarm.stopAll();
-        }
+    final userData = await database.get();
+    final data = Map<String, dynamic>.from(userData.value as Map);
+    user = UserModel.fromJson(data);
+    if (user.temperatureAlert == "true" ||
+        user.gasAlert == "true" ||
+        user.antiTheft == "true" ||
+        user.pump == "true" ||
+        user.zone1 == "true" ||
+        user.zone2 == "true" ||
+        user.zone3 == "true" ||
+        user.zone4 == "true") {
+      if (!Alarm.hasAlarm()) {
+        await Alarm.set(alarmSettings: alarmSettings);
       }
-    });
+    } else {
+      print(">>>>>>${Alarm.getAlarms().isNotEmpty}");
+      if (Alarm.getAlarms().isNotEmpty) {
+        Alarm.stopAll();
+      }
+    }
   }
 }
