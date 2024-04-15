@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fire_alarm_app/layer/presentation/home/index.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../../gen/assets.gen.dart';
 import '../../../utils/dimen.dart';
 import '../../../utils/font_data.dart';
 import '../../../utils/image_data.dart';
@@ -201,7 +202,7 @@ class HomeScreenState extends State<HomeScreen> {
                     children: [
                       NotiButton(
                         textButton: TextData.temperatureButton,
-                        image: ImageData.temperature,
+                        image: Assets.images.temperature.image(),
                         color: dataHomePage.temperatureAlert == "true"
                             ? const Color.fromARGB(255, 255, 180, 59)
                             : Colors.white,
@@ -211,7 +212,7 @@ class HomeScreenState extends State<HomeScreen> {
                       ),
                       NotiButton(
                         textButton: TextData.gasStationButton,
-                        image: ImageData.gasStation,
+                        image: Assets.images.gasStation.image(),
                         color: dataHomePage.gasAlert == "true"
                             ? const Color.fromARGB(255, 255, 180, 59)
                             : Colors.white,
@@ -226,7 +227,7 @@ class HomeScreenState extends State<HomeScreen> {
                     children: [
                       NotiButton(
                         textButton: TextData.notificationButton,
-                        image: ImageData.notification,
+                        image: Assets.images.notification.image(),
                         color: dataHomePage.antiTheft == "true"
                             ? const Color.fromARGB(255, 255, 180, 59)
                             : Colors.white,
@@ -236,7 +237,7 @@ class HomeScreenState extends State<HomeScreen> {
                       ),
                       NotiButton(
                         textButton: TextData.pumpButton,
-                        image: ImageData.pump,
+                        image: Assets.images.pump.image(),
                         color: dataHomePage.pump == "true"
                             ? const Color.fromARGB(255, 255, 180, 59)
                             : Colors.white,

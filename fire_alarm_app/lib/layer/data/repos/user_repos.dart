@@ -28,7 +28,15 @@ class UserRepository {
   Future<void> loginApp(String userName, String password) async {
     try {
       SharePref sharePref = SharePref();
+      try {
+        final res = await FirebaseDatabase.instance;
+        print(">>>>>>>>>${res.databaseURL}");
+      } catch (e) {
+        print(e);
+      }
+
       final ref = await database.ref(userName).get();
+      print(">>>>>>>>>${ref.value}");
       final data = Map<String, dynamic>.from(ref.value as Map);
       user = UserModel.fromJson(data);
       if (user != null && user!.password != password) {

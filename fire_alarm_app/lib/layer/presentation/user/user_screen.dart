@@ -1,6 +1,5 @@
 import 'package:fire_alarm_app/layer/data/repos/user_repos.dart';
 import 'package:fire_alarm_app/utils/constants.dart';
-import 'package:fire_alarm_app/utils/dimen.dart';
 import 'package:fire_alarm_app/utils/font_data.dart';
 import 'package:fire_alarm_app/utils/text_data.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fire_alarm_app/layer/presentation/user/index.dart';
-
-import '../../../main.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({

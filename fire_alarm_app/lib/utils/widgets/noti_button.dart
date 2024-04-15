@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class NotiButton extends StatelessWidget {
   final String textButton;
-  final String image;
+  final Image image;
   final Color color;
   const NotiButton({
     super.key,
@@ -33,14 +33,7 @@ class NotiButton extends StatelessWidget {
                 BoxShadow(
                     color: Colors.black, offset: Offset(0, 1), blurRadius: 3)
               ]),
-          child: Align(
-            alignment: Alignment.center,
-            child: Image.asset(
-              image,
-              width: 40,
-              height: 40,
-            ),
-          ),
+          child: Align(alignment: Alignment.center, child: image),
         )
       ],
     );
