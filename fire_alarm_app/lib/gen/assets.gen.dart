@@ -13,11 +13,36 @@ class $AssetsAudioGen {
   const $AssetsAudioGen();
 
   /// File path: assets/audio/sound_alarm.mp3
-  String get soundAlarm =>
-      'packages/fire_alarm_app/assets/audio/sound_alarm.mp3';
+  String get soundAlarm => 'assets/audio/sound_alarm.mp3';
 
   /// List of all assets
   List<String> get values => [soundAlarm];
+}
+
+class $AssetsColorGen {
+  const $AssetsColorGen();
+
+  /// File path: assets/color/colors.xml
+  String get colors => 'assets/color/colors.xml';
+
+  /// File path: assets/color/colors2.xml
+  String get colors2 => 'assets/color/colors2.xml';
+
+  /// List of all assets
+  List<String> get values => [colors, colors2];
+}
+
+class $AssetsFontGen {
+  const $AssetsFontGen();
+
+  /// File path: assets/font/DMSans-Bold.ttf
+  String get dMSansBold => 'assets/font/DMSans-Bold.ttf';
+
+  /// File path: assets/font/DMSans-Regular.ttf
+  String get dMSansRegular => 'assets/font/DMSans-Regular.ttf';
+
+  /// List of all assets
+  List<String> get values => [dMSansBold, dMSansRegular];
 }
 
 class $AssetsImagesGen {
@@ -53,9 +78,9 @@ class $AssetsImagesGen {
 class Assets {
   Assets._();
 
-  static const String package = 'fire_alarm_app';
-
   static const $AssetsAudioGen audio = $AssetsAudioGen();
+  static const $AssetsColorGen color = $AssetsColorGen();
+  static const $AssetsFontGen font = $AssetsFontGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }
 
@@ -63,8 +88,6 @@ class AssetGenImage {
   const AssetGenImage(this._assetName);
 
   final String _assetName;
-
-  static const String package = 'fire_alarm_app';
 
   Image image({
     Key? key,
@@ -86,8 +109,7 @@ class AssetGenImage {
     bool matchTextDirection = false,
     bool gaplessPlayback = false,
     bool isAntiAlias = false,
-    @Deprecated('Do not specify package for a generated library asset')
-    String? package = package,
+    String? package,
     FilterQuality filterQuality = FilterQuality.low,
     int? cacheWidth,
     int? cacheHeight,
@@ -122,8 +144,7 @@ class AssetGenImage {
 
   ImageProvider provider({
     AssetBundle? bundle,
-    @Deprecated('Do not specify package for a generated library asset')
-    String? package = package,
+    String? package,
   }) {
     return AssetImage(
       _assetName,
@@ -134,5 +155,5 @@ class AssetGenImage {
 
   String get path => _assetName;
 
-  String get keyName => 'packages/fire_alarm_app/$_assetName';
+  String get keyName => _assetName;
 }

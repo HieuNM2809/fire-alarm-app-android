@@ -67,10 +67,38 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
 flutter_gen:
+  output: lib/gen/ # Optional (default: lib/gen/)
+  line_length: 80 # Optional (default: 80)
+
+  # Optional
+  integrations:
+    flutter_svg: true
+    flare_flutter: true
+    rive: true
+    lottie: true
+
   assets:
+    enabled: true
+
     outputs:
-      package_parameter_enabled: true # <- Add this line.
+      class_name: Assets
+      package_parameter_enabled: false
+      # Assets.imagesChip
+      # style: camel-case
+
+      # Assets.images_chip
+      # style: snake-case
+
+      # Assets.images.chip (default style)
+      style: dot-delimiter
+
+    exclude:
+      - assets/images/
+      - assets/audio/
+      - assets/color/
+      - assets/font/
 # The following section is specific to Flutter packages.
 flutter:
   # The following line ensures that the Material Icons font is
@@ -82,6 +110,8 @@ flutter:
   assets:
     - assets/images/
     - assets/audio/
+    - assets/color/
+    - assets/font/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

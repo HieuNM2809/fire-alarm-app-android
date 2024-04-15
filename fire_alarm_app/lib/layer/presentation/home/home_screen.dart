@@ -89,7 +89,7 @@ class HomeScreenState extends State<HomeScreen> {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    "CÔNG TY TNHH THIÊN PHƯỚC LỘC",
+                    "CSSX TM THIÊN PHƯỚC LỘC",
                     style: FontData.dMSans16Bold(),
                   ),
                 ),
@@ -202,7 +202,8 @@ class HomeScreenState extends State<HomeScreen> {
                     children: [
                       NotiButton(
                         textButton: TextData.temperatureButton,
-                        image: Assets.images.temperature.image(),
+                        image: Assets.images.temperature
+                            .image(height: 40, width: 40),
                         color: dataHomePage.temperatureAlert == "true"
                             ? const Color.fromARGB(255, 255, 180, 59)
                             : Colors.white,
@@ -212,7 +213,8 @@ class HomeScreenState extends State<HomeScreen> {
                       ),
                       NotiButton(
                         textButton: TextData.gasStationButton,
-                        image: Assets.images.gasStation.image(),
+                        image: Assets.images.gasStation
+                            .image(height: 40, width: 40),
                         color: dataHomePage.gasAlert == "true"
                             ? const Color.fromARGB(255, 255, 180, 59)
                             : Colors.white,
@@ -227,7 +229,8 @@ class HomeScreenState extends State<HomeScreen> {
                     children: [
                       NotiButton(
                         textButton: TextData.notificationButton,
-                        image: Assets.images.notification.image(),
+                        image: Assets.images.notification
+                            .image(height: 40, width: 40),
                         color: dataHomePage.antiTheft == "true"
                             ? const Color.fromARGB(255, 255, 180, 59)
                             : Colors.white,
@@ -237,7 +240,7 @@ class HomeScreenState extends State<HomeScreen> {
                       ),
                       NotiButton(
                         textButton: TextData.pumpButton,
-                        image: Assets.images.pump.image(),
+                        image: Assets.images.pump.image(height: 40, width: 40),
                         color: dataHomePage.pump == "true"
                             ? const Color.fromARGB(255, 255, 180, 59)
                             : Colors.white,
