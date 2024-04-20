@@ -28,19 +28,18 @@ class UserRepository {
   Future<void> loginApp(String userName, String password) async {
     try {
       SharePref sharePref = SharePref();
-      try {
-        final res = await FirebaseDatabase.instance;
-        print(">>>>>>>>>${res.databaseURL}");
-      } catch (e) {
-        print(e);
-      }
-
       final ref = await database.ref(userName).get();
-      print(">>>>>>>>>${ref.value}");
       final data = Map<String, dynamic>.from(ref.value as Map);
       user = UserModel.fromJson(data);
       if (user != null && user!.password != password) {
         Validation.loginValidation(LoginValidationType.passwordWrong);
+
+        if (GoRouter.of(StateManager.navigatorKey.currentContext!)
+                .routeInformationProvider
+                .value
+                .uri
+                .toString() !=
+            LoginPage.routeName) await logOutApp();
       } else if (user != null &&
           user!.username == userName &&
           user!.password == password) {
@@ -62,10 +61,7 @@ class UserRepository {
   Future<void> logOutApp() async {
     final service = FlutterBackgroundService();
     SharePref sharePref = SharePref();
-    var isRunning = await service.isRunning();
-    if (isRunning) {
-      service.invoke("stopService");
-    }
+    service.invoke("stopService");
 
     await sharePref.remove('username');
     await sharePref.remove('password');
@@ -156,6 +152,16 @@ class UserRepository {
     } else {
       await ref.update({
         "buttonRemoteOFF": "true",
+        "antiTheft": "false",
+        "buttonRemoteON": "false",
+        "gasAlert": "false",
+        "pump": "false",
+        "sos": "false",
+        "temperatureAlert": "false",
+        "zone1": "false",
+        "zone2": "false",
+        "zone3": "false",
+        "zone4": "false"
       });
     }
   }

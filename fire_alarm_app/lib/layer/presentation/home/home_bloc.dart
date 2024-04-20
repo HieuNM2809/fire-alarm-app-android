@@ -5,14 +5,14 @@ import 'package:bloc/bloc.dart';
 import 'package:fire_alarm_app/layer/presentation/home/index.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-
-  HomeBloc(HomeState initialState) : super(initialState){
-   on<HomeEvent>((event, emit) {
+  HomeBloc(HomeState initialState) : super(initialState) {
+    on<HomeEvent>((event, emit) {
       return emit.forEach<HomeState>(
         event.applyAsync(currentState: state, bloc: this),
         onData: (state) => state,
         onError: (error, stackTrace) {
-          developer.log('$error', name: 'HomeBloc', error: error, stackTrace: stackTrace);
+          developer.log('$error',
+              name: 'HomeBloc', error: error, stackTrace: stackTrace);
           return ErrorHomeState(error.toString());
         },
       );

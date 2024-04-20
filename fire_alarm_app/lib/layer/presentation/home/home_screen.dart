@@ -165,27 +165,30 @@ class HomeScreenState extends State<HomeScreen> {
                     width: Dimen.sizeDevice.width * 0.2,
                     height: 60,
                     child: TextButton(
-                        onPressed: () async {
-                          await userRepository.updateSOS(
-                              widget._homeBloc, dataHomePage);
-                        },
-                        style: TextButton.styleFrom(
-                            elevation: 4,
-                            backgroundColor: dataHomePage.sos == "true"
-                                ? const Color.fromARGB(255, 255, 180, 59)
-                                : Colors.white,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0)),
-                            side: const BorderSide(
-                              color: Colors.black,
-                              width: 1,
-                            )),
-                        child: Text("SOS",
-                            style: FontData.dMSans14Bold(
-                                color: dataHomePage.sos == "true"
-                                    ? Colors.white
-                                    : Colors.black))),
+                      onPressed: () async {
+                        await userRepository.updateSOS(
+                            widget._homeBloc, dataHomePage);
+                      },
+                      style: TextButton.styleFrom(
+                          elevation: 4,
+                          backgroundColor: dataHomePage.sos == "true"
+                              ? const Color.fromARGB(255, 255, 180, 59)
+                              : Colors.white,
+                          shadowColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0)),
+                          side: const BorderSide(
+                            color: Colors.black,
+                            width: 1,
+                          )),
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: dataHomePage.sos == "true"
+                              ? Assets.images.alarmFireActive
+                                  .image(height: 40, width: 40)
+                              : Assets.images.alarmFire
+                                  .image(height: 40, width: 40)),
+                    ),
                   )
                 ],
               ),

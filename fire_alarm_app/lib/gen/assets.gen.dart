@@ -48,9 +48,24 @@ class $AssetsFontGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/alarm-fire-active.png
+  AssetGenImage get alarmFireActive =>
+      const AssetGenImage('assets/images/alarm-fire-active.png');
+
+  /// File path: assets/images/alarm-fire.png
+  AssetGenImage get alarmFire =>
+      const AssetGenImage('assets/images/alarm-fire.png');
+
   /// File path: assets/images/detector.png
   AssetGenImage get detector =>
       const AssetGenImage('assets/images/detector.png');
+
+  /// File path: assets/images/fire-active.png
+  AssetGenImage get fireActive =>
+      const AssetGenImage('assets/images/fire-active.png');
+
+  /// File path: assets/images/fire.png
+  AssetGenImage get fire => const AssetGenImage('assets/images/fire.png');
 
   /// File path: assets/images/gas_station.png
   AssetGenImage get gasStation =>
@@ -70,9 +85,28 @@ class $AssetsImagesGen {
   AssetGenImage get temperature =>
       const AssetGenImage('assets/images/temperature.png');
 
+  /// File path: assets/images/warning-active.png
+  AssetGenImage get warningActive =>
+      const AssetGenImage('assets/images/warning-active.png');
+
+  /// File path: assets/images/warning.png
+  AssetGenImage get warning => const AssetGenImage('assets/images/warning.png');
+
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [detector, gasStation, loading, notification, pump, temperature];
+  List<AssetGenImage> get values => [
+        alarmFireActive,
+        alarmFire,
+        detector,
+        fireActive,
+        fire,
+        gasStation,
+        loading,
+        notification,
+        pump,
+        temperature,
+        warningActive,
+        warning
+      ];
 }
 
 class Assets {

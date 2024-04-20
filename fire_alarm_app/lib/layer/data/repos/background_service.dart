@@ -71,11 +71,11 @@ class BackgroundService {
       }
 
       service.on('stopService').listen((event) {
+        time?.cancel();
+        service.stopSelf();
         if (Alarm.hasAlarm()) {
           Alarm.stopAll();
         }
-        time?.cancel();
-        service.stopSelf();
       });
 
       // bring to foreground

@@ -38,4 +38,5 @@ class TextData {
   static String passwordAndrePasswordEmpty = "Vui lòng điền thông tin đầy đủ";
   static String passwordNoMatchrePassword =
       "Xác nhận mật khẩu không giống mật khẩu";
+  static String noConnectInternet = "Chưa kết nối wifi hoặc dữ liệu di động";
 }
